@@ -32,7 +32,7 @@ const RegistrationInfoCard = ({ formik }) => {
       </Box>
 
       <Box className="border border-solid border-[#EBEBEBEE] rounded-[10px] rounded-tl-none rounded-tr-none flex flex-col items-center text-center gap-3">
-        <Typography className="bg-gradient-to-r from-[#299D3F] to-[#123F22] text-white rounded-[10px] p-2 rounded-tl-none rounded-tr-none w-70">
+        <Typography className="bg-gradient-to-r from-[#299D3F] to-[#123F22] text-white rounded-[10px] p-2 rounded-tl-none rounded-tr-none w-auto !px-5">
           Registration Information 1
         </Typography>
         <Typography className="text-[#D4D4D4] !text-[1.5rem] font-extrabold  uppercase">

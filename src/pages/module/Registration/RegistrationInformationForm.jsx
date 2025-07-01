@@ -507,11 +507,15 @@ const RegistrationInformationForm = ({ formik, activeStep, setActiveStep }) => {
             )}
           </Grid>
 
-          <Grid item size={{ xs: 12, sm: 6 }} className="flex justify-end">
+          <Grid
+            item
+            size={{ xs: 12, sm: 6 }}
+            className="flex justify-center sm:!justify-end"
+          >
             <Button
               onClick={handleOpen}
               variant="contained"
-              className="!mt-4 bg-gradient-to-r from-[#AB0202] to-[#240102]"
+              className="!mt-4 bg-gradient-to-r from-[#AB0202] to-[#240102] !whitespace-nowrap !h-fit"
             >
               Select &nbsp;
               <span style={{ fontWeight: "bold" }}> Solutions/Products</span>

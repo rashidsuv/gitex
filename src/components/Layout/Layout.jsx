@@ -10,7 +10,7 @@ export default function Layout() {
       <Header />
       <Box
         component="main"
-        className="flex-grow p-15"
+        className="flex-grow p-2 sm:p-5 md:p-15 !mt-10 sm:!mt-5 md:!mt-0"
         sx={{
           backgroundImage: `url(${bgImg})`,
           backgroundSize: "cover",

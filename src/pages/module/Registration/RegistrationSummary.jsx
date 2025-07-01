@@ -107,10 +107,14 @@ export default function RegistrationSummary({ formik }) {
               }}
             />
             <Button
-              disabled={promoCode === "" ? true : false}
+              disabled={promoCode === ""}
               variant="contained"
               onClick={() => setActive(true)}
-              className="bg-gradient-to-r from-[#9F1413] to-[#000000] !px-4 !mt-2"
+              className={`${
+                promoCode === ""
+                  ? "bg-gray-300"
+                  : "bg-gradient-to-r from-[#9F1413] to-[#000000]"
+              } !px-4 !mt-2 !font-bold`}
               size="small"
             >
               APPLY

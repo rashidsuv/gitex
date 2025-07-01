@@ -42,7 +42,7 @@ const content2 = (
       <span className="text-[#16DB65] font-semibold">3 DAYS ACCESS</span> to
       GITEX NIGERIA exhibition and all free conference
     </Typography>
-    <Box className="flex flex-wrap gap-2 mt-2">
+    <Box className="flex flex-wrap gap-2 mt-2 !max-h-[150px] overflow-hidden">
       {features.map((feature, index) => (
         <Box
           key={index}

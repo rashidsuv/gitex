@@ -85,7 +85,7 @@ const RegistrationFormPage = () => {
       <CustomStepper activeStep={activeStep} />
 
       {[0, 1, 2].includes(activeStep) ? (
-        <Box className="border border-solid border-[#579B29] bg-white rounded-[10px] m-6 mt-8 mx-20 p-3">
+        <Box className="border border-solid border-[#579B29] bg-white rounded-[10px] m-6 mt-8 p-3 mx-0 sm:!mx-5 md:!mx-10 lg:!mx-20">
           <Grid container spacing={1}>
             <Grid item size={{ xs: 12, md: 8 }}>
               <RegistrationInformationForm

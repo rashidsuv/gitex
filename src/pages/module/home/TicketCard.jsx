@@ -70,7 +70,7 @@ export default function TicketCard({ ticket }) {
             backdropFilter: "blur(4px)",
           }}
         />
-        <Box className="relative z-10 p-4 text-white min-h-[300px]">
+        <Box className="relative z-10 p-4 text-white !max-h-[300px] !min-h-[300px]">
           {ticket.content}
           <Divider className="bg-gradient-to-r from-[#FFFFFF] to-[#FFFFFF05] h-[2px] absolute bottom-15 right-0 left-9 w-[80%]" />
           {ticket.footer}
