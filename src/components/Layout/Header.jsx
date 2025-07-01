@@ -10,7 +10,7 @@ export default function Header() {
         backgroundSize: "100% 100%",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        zIndex: (theme) => theme.zIndex.drawer + 1,
+        zIndex:10002
       }}
     >
       <Toolbar className="!min-h-[110px] px-2">{/* login button remine */}</Toolbar>
