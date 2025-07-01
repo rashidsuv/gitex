@@ -13,6 +13,9 @@ const themeOptions = {
       main: "#1976d2",
     },
   },
+  typography: {
+    fontFamily: `'Alexandria', sans-serif`,
+  },
   components,
 };
 
