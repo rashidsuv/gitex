@@ -64,6 +64,29 @@ export default function TicketCard({ ticket }) {
         }}
       >
         <Box
+          className="!absolute !bg-white !rounded-full"
+          sx={{
+            width: "42px",
+            height: "45px",
+            top: "45%",
+            left: "-22px",
+            transform: "translateY(-60%)",
+            zIndex: 10001,
+          }}
+        />
+
+        <Box
+          className="absolute !bg-white rounded-full"
+          sx={{
+            width: "42px",
+            height: "45px",
+            top: "45%",
+            right: "-22px",
+            transform: "translateY(-60%)",
+            zIndex: 10001,
+          }}
+        />
+        <Box
           className="absolute inset-0"
           sx={{
             backgroundColor: "#000000DE",
