@@ -101,9 +101,10 @@ export default function RegistrationSummary({ formik }) {
                   e.target.value.toUpperCase().trim()
                 );
               }}
+              disabled={active}
               InputProps={{
                 disableUnderline: true,
-                className: "!bg-[#FFFFFF]",
+                className: active ? "!bg-[#E5E5E5]" : "!bg-[#FFFFFF]",
               }}
             />
             <Button

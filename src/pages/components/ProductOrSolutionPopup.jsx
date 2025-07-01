@@ -14,12 +14,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import bg_header from "../../assets/images/bg_header_footer.png";
 
-export default function ProductOrSolutionPopup({
-  open,
-  formik,
-  handleClose,
-  setActiveStep,
-}) {
+export default function ProductOrSolutionPopup({ open, formik, handleClose }) {
   const solutions = [
     { id: 1, value: "Global Leaders Forum !NEW (3 Days)" },
     { id: 2, value: "GITEX Main Stage" },
@@ -152,7 +147,6 @@ export default function ProductOrSolutionPopup({
           className="bg-gradient-to-r from-[#299D3F] to-[#123F22] text-white"
           onClick={() => {
             handleClose();
-            setActiveStep(2);
           }}
         >
           Apply

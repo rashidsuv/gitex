@@ -13,7 +13,7 @@ import { useState } from "react";
 import { MuiTelInput } from "mui-tel-input";
 import ProductOrSolutionPopup from "../../components/ProductOrSolutionPopup";
 
-const RegistrationInformationForm = ({ formik, activeStep, setActiveStep }) => {
+const RegistrationInformationForm = ({ formik }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -502,8 +502,8 @@ const RegistrationInformationForm = ({ formik, activeStep, setActiveStep }) => {
               What products & services are you interested in?
               <span style={{ color: "red" }}>*</span>
             </Typography>
-            {formik.values.product.length === 0 && activeStep > 0 && (
-              <FormHelperText error>Select Product or Serivce</FormHelperText>
+            {formik.touched.product && formik.errors.product && (
+              <FormHelperText error>{formik.errors.product}</FormHelperText>
             )}
           </Grid>
 
@@ -565,7 +565,6 @@ const RegistrationInformationForm = ({ formik, activeStep, setActiveStep }) => {
         open={open}
         formik={formik}
         handleClose={handleClose}
-        setActiveStep={setActiveStep}
       />
     </Box>
   );

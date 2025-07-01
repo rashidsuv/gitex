@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, Grid } from "@mui/material";
 import RegistrationSummary from "./RegistrationSummary";
 import RegistrationInfoCard from "./RegistrationInfoCard";
@@ -8,6 +9,7 @@ import CustomStepper from "../../components/CustomStepper";
 import RegistrationInformationForm from "./RegistrationInformationForm";
 
 const RegistrationFormPage = () => {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
 
   const validationSchema = yup.object({
@@ -35,6 +37,10 @@ const RegistrationFormPage = () => {
     companyType: yup.string().required("Company type is required"),
     industry: yup.string().required("Industry is required"),
     mobile: yup.string().required("Phone number is required"),
+    product: yup
+      .array()
+      .min(1, "Please select at least one product or service")
+      .required("Please select at least one product or service"),
   });
 
   const formik = useFormik({
@@ -62,37 +68,36 @@ const RegistrationFormPage = () => {
   });
 
   useEffect(() => {
-    const { errors, submitCount, values } = formik;
+    const { errors, submitCount } = formik;
 
     if (Object.keys(errors).length > 0 || submitCount === 0) {
       setActiveStep(0);
+      formik.setFieldValue("subProduct", []);
       return;
-    }
-
-    if (values.product.length > 1) {
-      setActiveStep(2);
-    } else if (values.product.length === 1) {
-      setActiveStep(3);
+    } else if (Object.keys(errors).length === 0 && submitCount !== 0) {
+      setActiveStep(1);
     } else {
       setActiveStep(1);
       formik.setFieldValue("subProduct", []);
     }
+
+    if (Object.keys(errors).length === 0 && activeStep === 1 && submitCount) {
+      setActiveStep(2);
+    } else if (Object.keys(errors).length === 0 && activeStep === 2) {
+      navigate("/success");
+    }
     // eslint-disable-next-line
-  }, [formik.errors, formik.submitCount, formik.values.product]);
+  }, [formik.errors, formik.submitCount]);
 
   return (
     <>
       <CustomStepper activeStep={activeStep} />
 
-      {[0, 1, 2].includes(activeStep) ? (
+      {[0, 1].includes(activeStep) ? (
         <Box className="border border-solid border-[#579B29] bg-white rounded-[10px] m-6 mt-8 p-3 mx-0 sm:!mx-5 md:!mx-10 lg:!mx-20">
           <Grid container spacing={1}>
             <Grid item size={{ xs: 12, md: 8 }}>
-              <RegistrationInformationForm
-                formik={formik}
-                activeStep={activeStep}
-                setActiveStep={setActiveStep}
-              />
+              <RegistrationInformationForm formik={formik} />
             </Grid>
             <Grid item size={{ xs: 12, md: 4 }}>
               <RegistrationInfoCard formik={formik} />
@@ -100,7 +105,7 @@ const RegistrationFormPage = () => {
           </Grid>
         </Box>
       ) : (
-        <RegistrationSummary formik={formik} />
+        [2].includes(activeStep) && <RegistrationSummary formik={formik} />
       )}
       <Box mt={2} display="flex" justifyContent="center" gap={2}>
         {activeStep > 0 && (
@@ -115,6 +120,11 @@ const RegistrationFormPage = () => {
         <Button
           variant="contained"
           onClick={() => formik.handleSubmit()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+            }
+          }}
           className="bg-gradient-to-r from-[#299D3F] to-[#123F22] !px-6"
         >
           Next
