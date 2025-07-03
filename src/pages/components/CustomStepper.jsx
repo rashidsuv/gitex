@@ -54,9 +54,10 @@ function CustomStepIcon(props) {
   );
 }
 
-const steps = ["1", "2", "3", "4"];
-
 export default function CustomStepper({ activeStep }) {
+  const ticketCount = Number(localStorage.getItem("ticketCount")) || 0;
+  const steps = Array.from({ length: ticketCount + 1 }, (_, i) => `${i + 1}`);
+
   return (
     <Box
       sx={{

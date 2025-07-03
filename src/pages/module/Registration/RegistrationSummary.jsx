@@ -11,11 +11,18 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function RegistrationSummary({ formik }) {
+export default function RegistrationSummary() {
   const navigate = useNavigate();
+  const ticketCount = Number(localStorage.getItem("ticketCount")) || 1;
 
-  const { promoCode } = formik.values;
   const [active, setActive] = useState(false);
+
+  const [promoCode, setPromoCode] = useState("");
+
+  const handleChange = (e) => {
+    setPromoCode(e.target.value.toUpperCase().trim());
+  };
+
   return (
     <Box className="bg-white rounded-xl shadow p-4 mt-4">
       <Box className="rounded-lg p-3 bg-gradient-to-r from-[#299D3F] to-[#123F22] text-white text-[1.3rem] font-bold py-4">
@@ -26,7 +33,9 @@ export default function RegistrationSummary({ formik }) {
         {!active ? (
           <>
             <Box className="flex justify-between">
-              <Typography className="!font-bold">PREMIUM TICKET x 2</Typography>
+              <Typography className="!font-bold">
+                PREMIUM TICKET x {ticketCount}
+              </Typography>
               <Typography className="text-sm">EUR 40.19</Typography>
             </Box>
             <Divider className="!mb-2" />
@@ -43,7 +52,7 @@ export default function RegistrationSummary({ formik }) {
         ) : (
           <Box className="bg-[#F0FFF0] border-l-[4px] border-[#299D3F] rounded-[1px] p-3 flex justify-between ">
             <Typography className="text-sm font-normal text-[#1A1A1A] uppercase">
-              PREMIUM TICKET X 2
+              PREMIUM TICKET X {ticketCount}
             </Typography>
 
             <Box className="text-right !space-y-1.5">
@@ -94,13 +103,8 @@ export default function RegistrationSummary({ formik }) {
               className="w-[94%] !mt-2"
               id="promoCode"
               name="promoCode"
-              value={formik.values.promoCode.toUpperCase()}
-              onChange={(e) => {
-                formik.setFieldValue(
-                  "promoCode",
-                  e.target.value.toUpperCase().trim()
-                );
-              }}
+              value={promoCode.toUpperCase()}
+              onChange={handleChange}
               disabled={active}
               InputProps={{
                 disableUnderline: true,
@@ -156,7 +160,7 @@ export default function RegistrationSummary({ formik }) {
                   size="small"
                   onClick={() => {
                     setActive(false);
-                    formik.setFieldValue("promoCode", "");
+                    setPromoCode("");
                   }}
                   variant="outlined"
                   className="!rounded-[8px]  !border-[#C7000C] !border-[2px] !text-[#C7000C] !font-bold normal-case h-fit self-center"
@@ -189,7 +193,7 @@ export default function RegistrationSummary({ formik }) {
                 <Button
                   onClick={() => {
                     setActive(false);
-                    formik.setFieldValue("promoCode", "");
+                    setPromoCode("");
                   }}
                   variant="outlined"
                   className="rounded-[8px] !border-[2px] !border-[#262626] !text-[#262626] !font-bold normal-case"
@@ -197,7 +201,6 @@ export default function RegistrationSummary({ formik }) {
                   Back
                 </Button>
                 <Button
-                  disabled={formik.values.product.length === 0}
                   variant="contained"
                   className="bg-gradient-to-r from-[#299D3F] to-[#123F22] text-white"
                   onClick={() => navigate("/success")}

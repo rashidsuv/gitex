@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import TicketCard from "./TicketCard";
+import { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import gitex_ai from "../../../assets/images/gitex_ai.png";
@@ -58,38 +59,6 @@ const content2 = (
   </Box>
 );
 
-const footer1 = (
-  <Box className="flex items-center justify-between  mt-2 absolute !bottom-4 left-10 w-[80%]">
-    <Box className="flex items-center gap-2">
-      <Typography className="text-white text-sm !font-bold">
-        USD <span className="line-through text-red-600">43</span>
-      </Typography>
-      <Typography className="bg-black text-white !font-bold px-1 py-[1px] rounded border border-white">
-        32.5
-      </Typography>
-      <Typography className="text-white !text-xs">Incl. 20% VAT</Typography>
-    </Box>
-
-    <Box className="flex items-center border border-white rounded overflow-hidden text-white">
-      <IconButton
-        size="small"
-        className="!text-white !p-0.5"
-        sx={{ borderRadius: 0 }}
-      >
-        <RemoveIcon fontSize="small" />
-      </IconButton>
-      <Box className="bg-white text-black px-3 py-[2px] text-sm">25</Box>
-      <IconButton
-        size="small"
-        className="!text-white !p-0.5"
-        sx={{ borderRadius: 0 }}
-      >
-        <AddIcon fontSize="small" />
-      </IconButton>
-    </Box>
-  </Box>
-);
-
 const footer2 = (
   <Box className="flex items-center justify-between  !mt-2 absolute !bottom-4 left-10 w-[80%]">
     <Box className="flex flex-col">
@@ -113,53 +82,108 @@ const footer2 = (
   </Box>
 );
 
-const tickets = [
-  {
-    id: 0,
-    title: "VISITOR 3 DAY ACCESS TICKET",
-    content: content1,
-    footer: footer1,
-  },
-  {
-    id: 1,
-    title: "VISITOR 3 DAY ACCESS TICKET",
-    content: content2,
-    footer: footer2,
-  },
-  {
-    id: 2,
-    title: "VISITOR 3 DAY ACCESS TICKET",
-    badge: "EXCLUSIVE",
-    content: content2,
-    footer: footer2,
-  },
-  {
-    id: 3,
-    title: "VISITOR 3 DAY ACCESS TICKET",
-    badge: "BEST SELLER",
-    content: content2,
-    footer: footer2,
-  },
-  {
-    id: 4,
-    title: "VISITOR 3 DAY ACCESS TICKET",
-    content: content2,
-    footer: footer2,
-  },
-  {
-    id: 5,
-    title: "VISITOR 3 DAY ACCESS TICKET",
-    content: content2,
-    footer: footer2,
-  },
-];
-
 export default function HomePage() {
+  const [count, setCount] = useState(1);
+
+  const ticketAdd = () => {
+    if (count === 5) {
+      window.alert("Maximum limit of 5 reached");
+    }
+    if (count < 5) {
+      setCount(count + 1);
+    }
+  };
+
+  const ticketRemove = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  useEffect(() => {
+    localStorage.setItem("ticketCount", count.toString());
+  }, [count]);
+
+  const footer1 = (
+    <Box className="flex items-center justify-between  mt-2 absolute !bottom-4 left-10 w-[80%]">
+      <Box className="flex items-center gap-2">
+        <Typography className="text-white text-sm !font-bold">
+          USD <span className="line-through text-red-600">43</span>
+        </Typography>
+        <Typography className="bg-black text-white !font-bold px-1 py-[1px] rounded border border-white">
+          32.5
+        </Typography>
+        <Typography className="text-white !text-xs">Incl. 20% VAT</Typography>
+      </Box>
+
+      <Box className="flex items-center border border-white rounded overflow-hidden text-white">
+        <IconButton
+          size="small"
+          className="!text-white !p-0.5"
+          sx={{ borderRadius: 0 }}
+          onClick={ticketRemove}
+        >
+          <RemoveIcon fontSize="small" />
+        </IconButton>
+        <Box className="bg-white text-black px-3 py-[2px] text-sm">{count}</Box>
+        <IconButton
+          size="small"
+          className="!text-white !p-0.5"
+          sx={{ borderRadius: 0 }}
+          onClick={ticketAdd}
+        >
+          <AddIcon fontSize="small" />
+        </IconButton>
+      </Box>
+    </Box>
+  );
+
+  const tickets = [
+    {
+      id: 0,
+      title: "VISITOR 3 DAY ACCESS TICKET",
+      content: content1,
+      footer: footer1,
+    },
+    {
+      id: 1,
+      title: "VISITOR 3 DAY ACCESS TICKET",
+      content: content2,
+      footer: footer2,
+    },
+    {
+      id: 2,
+      title: "VISITOR 3 DAY ACCESS TICKET",
+      badge: "EXCLUSIVE",
+      content: content2,
+      footer: footer2,
+    },
+    {
+      id: 3,
+      title: "VISITOR 3 DAY ACCESS TICKET",
+      badge: "BEST SELLER",
+      content: content2,
+      footer: footer2,
+    },
+    {
+      id: 4,
+      title: "VISITOR 3 DAY ACCESS TICKET",
+      content: content2,
+      footer: footer2,
+    },
+    {
+      id: 5,
+      title: "VISITOR 3 DAY ACCESS TICKET",
+      content: content2,
+      footer: footer2,
+    },
+  ];
+
   return (
     <Grid container spacing={1.5} className="!mt-4">
       {tickets.map((ticket) => (
         <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={ticket.id}>
-          <TicketCard ticket={ticket} />
+          <TicketCard ticket={ticket} count={count} />
         </Grid>
       ))}
     </Grid>

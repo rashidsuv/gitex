@@ -13,7 +13,7 @@ import { useState } from "react";
 import { MuiTelInput } from "mui-tel-input";
 import ProductOrSolutionPopup from "../../components/ProductOrSolutionPopup";
 
-const RegistrationInformationForm = ({ formik }) => {
+const RegistrationInformationForm = ({ formik, index }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -107,7 +107,7 @@ const RegistrationInformationForm = ({ formik }) => {
     <Box className="w-full mx-auto my-auto">
       <Box className="bg-gradient-to-r from-[#299D3F] to-[#123F22] rounded-tl-[9.77px] rounded-tr-[9.77px] flex justify-between items-center py-3">
         <Box className="text-white p-4 text-[1.5rem] font-bold">
-          Registration Information 1
+          Registration Information {index + 1 || 1}
         </Box>
         <Box className="border border-solid border-[#FFFFFF47] rounded-[9.77px] bg-[#FFFFFF14] text-white text-[0.9rem] font-thin pt-[11.72px] pr-[19.53px] pb-[11.72px] pl-[19.53px] mx-4">
           PREMIUM TICKET - FREEIncl. 19% VAT
