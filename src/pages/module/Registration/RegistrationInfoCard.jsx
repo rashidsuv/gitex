@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import info_logo from "../../../assets/images/info_icons.png";
 import bg_header from "../../../assets/images/bg_header_footer.png";
 
-const RegistrationInfoCard = ({ forms }) => {
+const RegistrationInfoCard = ({ forms, formik, activeFormIndex }) => {
   return (
     <>
       <Box className="w-full h-full flex flex-col mx-auto my-auto">
@@ -30,12 +30,14 @@ const RegistrationInfoCard = ({ forms }) => {
 
         <Box className="overflow-y-auto flex-1 w-full max-h-screen">
           {forms.map((item, index) => {
+            const isActive = index === activeFormIndex;
+            const formData = isActive ? formik.values : item;
             const labels = [
-              { label: "JOB TITLE", name: item.jobTitle },
-              { label: "COMPANY NAME", name: item.companyName },
+              { label: "JOB TITLE", name: formData.jobTitle },
+              { label: "COMPANY NAME", name: formData.companyName },
               {
                 label: "COUNTRY OF RESIDENCE",
-                name: item.countryOfResidenceName,
+                name: formData.countryOfResidenceName,
               },
             ];
             return (
@@ -46,17 +48,22 @@ const RegistrationInfoCard = ({ forms }) => {
                   </Typography>
                   <Typography
                     className={`${
-                      item.firstName === "" ? "text-[#D4D4D4]" : "text-black"
+                      formData.firstName === ""
+                        ? "text-[#D4D4D4]"
+                        : "text-black"
                     } !text-[1.5rem] font-extrabold  uppercase`}
                   >
-                    {item.firstName?.trim() !== ""
-                      ? `${item.firstName} ${item.lastName?.trim() || ""}`
+                    {formData.firstName?.trim() !== ""
+                      ? `${formData.firstName} ${
+                          formData.lastName?.trim() || ""
+                        }`
                       : "FULL NAME"}
                   </Typography>
 
-                  {labels.map((item) => {
+                  {labels.map((item, idx) => {
                     return (
                       <Typography
+                        key={idx}
                         className={`${
                           item.name === "" ? "text-[#D4D4D4]" : "text-black"
                         } font-extrabold uppercase`}
@@ -71,7 +78,7 @@ const RegistrationInfoCard = ({ forms }) => {
                       BADGE CATEGORY
                     </Typography>
                     <Typography className="text-[#010216] !text-[1.8rem] font-extrabold  uppercase">
-                      {item.vistorType}
+                      {formData.vistorType}
                     </Typography>
                   </Box>
                 </Box>

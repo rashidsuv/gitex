@@ -171,7 +171,11 @@ const RegistrationFormPage = () => {
             />
           </Grid>
           <Grid item size={{ xs: 12, md: 4 }}>
-            <RegistrationInfoCard forms={forms} index={activeFormIndex} />
+            <RegistrationInfoCard
+              forms={forms}
+              formik={formik}
+              activeFormIndex={activeFormIndex}
+            />
           </Grid>
         </Grid>
       </Box>
