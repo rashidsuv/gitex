@@ -4,8 +4,13 @@ const autocomplete = {
       root: {
         "& .MuiOutlinedInput-root": {
           padding: "3px 9px",
-          height: "45px",    
+          height: "45px",
         },
+      },
+      "& .MuiFormHelperText-root": {
+        color: "#d32f2f",
+        marginLeft: 0,
+        fontSize: "0.75rem",
       },
       popupIndicator: {
         width: "auto",

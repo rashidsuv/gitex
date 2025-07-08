@@ -103,6 +103,15 @@ const RegistrationInformationForm = ({ formik, index }) => {
     },
   ];
 
+  const FormLabel = ({ label, required = false }) => {
+    return (
+      <Typography variant="subtitle1" color="textPrimary">
+        {label}
+        {required && <span style={{ color: "#d32f2f" }}> *</span>}
+      </Typography>
+    );
+  };
+
   return (
     <Box className="w-full mx-auto my-auto">
       <Box className="bg-gradient-to-r from-[#299D3F] to-[#123F22] rounded-tl-[9.77px] rounded-tr-[9.77px] flex justify-between items-center py-3">
@@ -118,39 +127,36 @@ const RegistrationInformationForm = ({ formik, index }) => {
         <Grid container spacing={3}>
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1" color="textPrimary">
-                First name <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="First name" required />
               <TextField
                 fullWidth
                 id="firstName"
                 name="firstName"
                 value={formik.values.firstName}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.setFieldValue("firstName", e.target.value.trimStart());
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.firstName && Boolean(formik.errors.firstName)
                 }
                 helperText={formik.touched.firstName && formik.errors.firstName}
                 placeholder="Enter first name"
-                FormHelperTextProps={{
-                  sx: { color: "red", marginLeft: 0 },
-                }}
               />
             </Stack>
           </Grid>
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">
-                Last name <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="Last name" required />
               <TextField
                 required
                 id="lastName"
                 name="lastName"
                 value={formik.values.lastName}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.setFieldValue("lastName", e.target.value.trimStart());
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.lastName && Boolean(formik.errors.lastName)
@@ -158,18 +164,13 @@ const RegistrationInformationForm = ({ formik, index }) => {
                 helperText={formik.touched.lastName && formik.errors.lastName}
                 placeholder="Enter last name"
                 fullWidth
-                FormHelperTextProps={{
-                  sx: { color: "red", marginLeft: 0 },
-                }}
               />
             </Stack>
           </Grid>
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">
-                Country of residence <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="Country of residence" required={index === 0} />
               <Autocomplete
                 id="tags-outlined"
                 options={countryData}
@@ -202,9 +203,6 @@ const RegistrationInformationForm = ({ formik, index }) => {
                       formik.touched.countryOfResidence &&
                       formik.errors.countryOfResidence
                     }
-                    FormHelperTextProps={{
-                      sx: { color: "red", marginLeft: 0 },
-                    }}
                   />
                 )}
               />
@@ -213,7 +211,7 @@ const RegistrationInformationForm = ({ formik, index }) => {
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">Region</Typography>
+              <FormLabel label="Region" required={index === 0} />
               <Autocomplete
                 id="tags-outlined"
                 options={
@@ -241,6 +239,10 @@ const RegistrationInformationForm = ({ formik, index }) => {
                     id="region"
                     placeholder="Choose region"
                     value={formik.values.region}
+                    error={
+                      formik.touched.region && Boolean(formik.errors.region)
+                    }
+                    helperText={formik.touched.region && formik.errors.region}
                   />
                 )}
               />
@@ -249,36 +251,38 @@ const RegistrationInformationForm = ({ formik, index }) => {
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">
-                Email address <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="Email address" required />
               <TextField
                 required
                 id="email"
                 name="email"
                 value={formik.values.email}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.setFieldValue("email", e.target.value.trimStart());
+                }}
                 onBlur={formik.handleBlur}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
                 placeholder="Enter email address"
                 fullWidth
-                FormHelperTextProps={{
-                  sx: { color: "red", marginLeft: 0 },
-                }}
               />
             </Stack>
           </Grid>
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">Confirm email address</Typography>
+              <FormLabel label="Confirm email address" required />
               <TextField
                 required
                 id="confirmEmail"
                 name="confirmEmail"
                 value={formik.values.confirmEmail}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.setFieldValue(
+                    "confirmEmail",
+                    e.target.value.trimStart()
+                  );
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.confirmEmail &&
@@ -289,16 +293,13 @@ const RegistrationInformationForm = ({ formik, index }) => {
                 }
                 placeholder="Enter confirm email address"
                 fullWidth
-                FormHelperTextProps={{
-                  sx: { color: "red", marginLeft: 0 },
-                }}
               />
             </Stack>
           </Grid>
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">Nationality</Typography>
+              <FormLabel label="Nationality" required={index === 0} />
               <Autocomplete
                 id="tags-outlined"
                 options={nationalities}
@@ -318,6 +319,13 @@ const RegistrationInformationForm = ({ formik, index }) => {
                     id="nationality"
                     placeholder="Choose nationality"
                     value={formik.values.nationality}
+                    error={
+                      formik.touched.nationality &&
+                      Boolean(formik.errors.nationality)
+                    }
+                    helperText={
+                      formik.touched.nationality && formik.errors.nationality
+                    }
                   />
                 )}
               />
@@ -326,9 +334,7 @@ const RegistrationInformationForm = ({ formik, index }) => {
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">
-                Mobile number <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="Mobile number" required={index === 0} />
               <Stack direction="row" spacing={1}>
                 <MuiTelInput
                   value={formik.values.countryCode}
@@ -350,7 +356,10 @@ const RegistrationInformationForm = ({ formik, index }) => {
                   placeholder="Enter mobile number"
                   name="mobile"
                   value={formik.values.mobile}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    formik.setFieldValue("mobile", e.target.value.trimStart());
+                  }}
+                  onBlur={formik.handleBlur}
                   error={formik.touched.mobile && Boolean(formik.errors.mobile)}
                   helperText={formik.touched.mobile && formik.errors.mobile}
                 />
@@ -360,15 +369,18 @@ const RegistrationInformationForm = ({ formik, index }) => {
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1" color="textPrimary">
-                Company name <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="Company name" required={index === 0} />
               <TextField
                 fullWidth
                 id="companyName"
                 name="companyName"
                 value={formik.values.companyName}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.setFieldValue(
+                    "companyName",
+                    e.target.value.trimStart()
+                  );
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.companyName &&
@@ -378,42 +390,34 @@ const RegistrationInformationForm = ({ formik, index }) => {
                   formik.touched.companyName && formik.errors.companyName
                 }
                 placeholder="Enter company name"
-                FormHelperTextProps={{
-                  sx: { color: "red", marginLeft: 0 },
-                }}
               />
             </Stack>
           </Grid>
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1" color="textPrimary">
-                Job title <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="Job title" required={index === 0} />
               <TextField
                 fullWidth
                 id="jobTitle"
                 name="jobTitle"
                 value={formik.values.jobTitle}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.setFieldValue("jobTitle", e.target.value.trimStart());
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.jobTitle && Boolean(formik.errors.jobTitle)
                 }
                 helperText={formik.touched.jobTitle && formik.errors.jobTitle}
                 placeholder="Enter job title"
-                FormHelperTextProps={{
-                  sx: { color: "red", marginLeft: 0 },
-                }}
               />
             </Stack>
           </Grid>
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">
-                Company type <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="Company type" required={index === 0} />
               <Autocomplete
                 id="tags-outlined"
                 options={industries}
@@ -442,9 +446,6 @@ const RegistrationInformationForm = ({ formik, index }) => {
                     helperText={
                       formik.touched.companyType && formik.errors.companyType
                     }
-                    FormHelperTextProps={{
-                      sx: { color: "red", marginLeft: 0 },
-                    }}
                   />
                 )}
               />
@@ -453,9 +454,7 @@ const RegistrationInformationForm = ({ formik, index }) => {
 
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Stack spacing={1}>
-              <Typography variant="subtitle1">
-                Industry <span style={{ color: "red" }}>*</span>
-              </Typography>
+              <FormLabel label="Industry" required={index === 0} />
               <Autocomplete
                 id="tags-outlined"
                 options={
@@ -488,9 +487,6 @@ const RegistrationInformationForm = ({ formik, index }) => {
                     helperText={
                       formik.touched.industry && formik.errors.industry
                     }
-                    FormHelperTextProps={{
-                      sx: { color: "red", marginLeft: 0 },
-                    }}
                   />
                 )}
               />
@@ -500,9 +496,9 @@ const RegistrationInformationForm = ({ formik, index }) => {
           <Grid item size={{ xs: 12, sm: 6 }}>
             <Typography className="!mt-6">
               What products & services are you interested in?
-              <span style={{ color: "red" }}>*</span>
+              {index === 0 && <span style={{ color: "red" }}> *</span>}
             </Typography>
-            {formik.touched.product && formik.errors.product && (
+            {index === 0 && formik.touched.product && formik.errors.product && (
               <FormHelperText error>{formik.errors.product}</FormHelperText>
             )}
           </Grid>

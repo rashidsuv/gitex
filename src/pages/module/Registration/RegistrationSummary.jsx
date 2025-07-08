@@ -3,6 +3,7 @@ import {
   Chip,
   Button,
   Divider,
+  Tooltip,
   Checkbox,
   TextField,
   Typography,
@@ -18,9 +19,21 @@ export default function RegistrationSummary() {
   const [active, setActive] = useState(false);
 
   const [promoCode, setPromoCode] = useState("");
+  const [terms, setTerms] = useState({
+    term1: false,
+    term2: false,
+  });
 
   const handleChange = (e) => {
     setPromoCode(e.target.value.toUpperCase().trim());
+  };
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setTerms((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
   };
 
   return (
@@ -200,13 +213,24 @@ export default function RegistrationSummary() {
                 >
                   Back
                 </Button>
-                <Button
-                  variant="contained"
-                  className="bg-gradient-to-r from-[#299D3F] to-[#123F22] text-white"
-                  onClick={() => navigate("/success")}
+                <Tooltip
+                  title={
+                    !(terms.term1 && terms.term2) &&
+                    "Check the terms and condtion"
+                  }
                 >
-                  Next
-                </Button>
+                  <Button
+                    variant="contained"
+                    className="bg-gradient-to-r from-[#299D3F] to-[#123F22] text-white"
+                    onClick={() => {
+                      if (terms.term1 && terms.term2) {
+                        navigate("/success");
+                      }
+                    }}
+                  >
+                    Next
+                  </Button>
+                </Tooltip>
               </Typography>
             </Box>
           </>
@@ -225,6 +249,9 @@ export default function RegistrationSummary() {
           <FormControlLabel
             control={
               <Checkbox
+                name="term1"
+                checked={terms.term1}
+                onChange={handleCheckboxChange}
                 sx={{
                   mb: 2.5,
                   color: "#000000",
@@ -253,6 +280,9 @@ export default function RegistrationSummary() {
           <FormControlLabel
             control={
               <Checkbox
+                name="term2"
+                checked={terms.term2}
+                onChange={handleCheckboxChange}
                 sx={{
                   mb: 2.5,
                   color: "#000000",

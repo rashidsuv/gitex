@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Grid } from "@mui/material";
 import RegistrationInfoCard from "./RegistrationInfoCard";
 import CustomStepper from "../../components/CustomStepper";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import RegistrationInformationForm from "./RegistrationInformationForm";
 
 const initialFormValues = {
@@ -16,7 +17,7 @@ const initialFormValues = {
   email: "",
   confirmEmail: "",
   nationality: "",
-  countryCode: "",
+  countryCode: "+234",
   mobile: "",
   companyName: "",
   jobTitle: "",
@@ -36,6 +37,13 @@ const RegistrationFormPage = () => {
   const [forms, setForms] = useState([initialFormValues]);
   const [activeFormIndex, setActiveFormIndex] = useState(0);
 
+  const countryCodeMap = {
+    "+91": "IN",
+    "+234": "NG",
+    "+44": "GB",
+    "+1": "US",
+  };
+
   const validationSchema = yup.object({
     firstName: yup.string().required("First name is required"),
     lastName: yup.string().required("Last name is required"),
@@ -47,61 +55,102 @@ const RegistrationFormPage = () => {
     confirmEmail: yup
       .string()
       .nullable()
+      .required("Confirm Email is required")
       .test(
         "confirm-email-match",
         "Confirm email must match email",
         function (value) {
           const { email } = this.parent;
           if (!value) return true;
-          return value === email;
+          return value.toLowerCase() === email.toLowerCase();
         }
       ),
     jobTitle: yup.string().required("Job title is required"),
     companyName: yup.string().required("Company name is required"),
     companyType: yup.string().required("Company type is required"),
     industry: yup.string().required("Industry is required"),
-    mobile: yup.string().required("Phone number is required"),
+    region: yup.string().required("Region is required"),
+    nationality: yup.string().required("Nationality is required"),
     product: yup
       .array()
       .min(1, "Please select at least one product or service")
       .required("Please select at least one product or service"),
+    countryCode: yup.string().required("Country code is required"),
+    mobile: yup
+      .string()
+      .required("Phone number is required")
+      .test("is-valid-mobile", "Invalid mobile number", function (value) {
+        const { countryCode } = this.parent;
+        if (!value || !countryCode) return false;
+
+        const isoCode = countryCodeMap[countryCode];
+        if (!isoCode) return false;
+
+        const phoneNumber = parsePhoneNumberFromString(value, isoCode);
+        return phoneNumber ? phoneNumber.isValid() : false;
+      }),
   });
 
+  const validationSchemaForChild = yup.object({
+    firstName: yup.string().required("First name is required"),
+    lastName: yup.string().required("Last name is required"),
+    email: yup
+      .string()
+      .email("Please enter a valid email address")
+      .required("Email is required"),
+    confirmEmail: yup
+      .string()
+      .nullable()
+      .required("Confirm Email is required")
+      .test(
+        "confirm-email-match",
+        "Confirm email must match email",
+        function (value) {
+          const { email } = this.parent;
+          if (!value) return true;
+          return value.toLowerCase() === email.toLowerCase();
+        }
+      ),
+  });
+  console.log("activeFormIndex", activeFormIndex);
   const formik = useFormik({
     initialValues: forms[activeFormIndex],
-    validationSchema,
+    validationSchema:
+      activeFormIndex === 0 ? validationSchema : validationSchemaForChild,
     enableReinitialize: true,
-    onSubmit: async (values) => {
-      const errors = await formik.validateForm();
-
-      if (Object.keys(errors).length > 0) {
-        formik.setTouched(
-          Object.keys(errors).reduce((acc, key) => {
-            acc[key] = true;
-            return acc;
-          }, {})
-        );
-        return;
-      }
-
-      const updatedForms = [...forms];
-      updatedForms[activeFormIndex] = values;
-      setForms(updatedForms);
-
-      if (activeFormIndex + 1 < ticketCount) {
-        if (!updatedForms[activeFormIndex + 1]) {
-          updatedForms.push(initialFormValues);
-        }
-        setForms(updatedForms);
-
-        setActiveFormIndex(activeFormIndex + 1);
-
-        formik.setValues(initialFormValues);
-      } else {
-        navigate("/registration-summary");
-      }
-    },
   });
+
+  const handleNextClick = async () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    formik.setErrors({});
+    formik.setTouched({});
+    const errors = await formik.validateForm();
+
+    if (Object.keys(errors).length > 0) {
+      formik.setTouched(
+        Object.keys(errors).reduce((acc, key) => {
+          acc[key] = true;
+          return acc;
+        }, {})
+      );
+      return;
+    }
+
+    const updatedForms = [...forms];
+    updatedForms[activeFormIndex] = formik.values;
+    setForms(updatedForms);
+
+    if (activeFormIndex + 1 < ticketCount) {
+      if (!updatedForms[activeFormIndex + 1]) {
+        updatedForms.push({ ...initialFormValues });
+      }
+      setForms(updatedForms);
+      setActiveFormIndex(activeFormIndex + 1);
+      formik.setValues(initialFormValues);
+    } else {
+      navigate("/registration-summary");
+    }
+  };
 
   const handlePrevious = () => {
     if (activeFormIndex > 0) {
@@ -138,8 +187,9 @@ const RegistrationFormPage = () => {
           </Button>
         )}
         <Button
+          type="button"
           variant="contained"
-          onClick={() => formik.handleSubmit()}
+          onClick={handleNextClick}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
